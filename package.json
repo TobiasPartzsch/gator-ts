@@ -1,0 +1,27 @@
+{
+  "name": "gator-ts",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "BootDev guilded project for a RSS feed aggregator. In TS this time.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsx ./src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TobiasPartzsch/gator-ts.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TobiasPartzsch/gator-ts/issues"
+  },
+  "homepage": "https://github.com/TobiasPartzsch/gator-ts#readme",
+  "devDependencies": {
+    "@types/node": "^24.2.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2"
+  }
+}
