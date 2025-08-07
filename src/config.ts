@@ -17,17 +17,10 @@ function validateConfig(rawConfig: any) {
     if (!rawConfig.db_url || typeof rawConfig.db_url !== "string") {
         throw new Error("db_url is required in config file");
     }
-    if (
-        !rawConfig.current_user_name ||
-        typeof rawConfig.current_user_name !== "string"
-    ) {
-        rawConfig.current_user_name = undefined;
-        // throw new Error("current_user_name is required in config file");
-    }
 
     const config: Config = {
         dbUrl: rawConfig.db_url,
-        currentUserName: rawConfig.current_user_name,
+        currentUserName: rawConfig.current_user_name || undefined,
     };
 
     return config;
