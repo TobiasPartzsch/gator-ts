@@ -4,9 +4,9 @@ import {
     registerCommand,
     runCommand,
 } from "./commands/commands";
-import { handlerAddFeed, handlerFeeds } from "./commands/feeds";
+import { handlerAddFeed, handlerListFeeds } from "./commands/feeds";
 import { handlerReset } from "./commands/reset";
-import { handlerLogin, handlerRegister, handlerUsers } from "./commands/users";
+import { handlerListUsers, handlerLogin, handlerRegister } from "./commands/users";
 
 async function main(): Promise<void> {
     const args = process.argv.slice(2);
@@ -24,11 +24,11 @@ async function main(): Promise<void> {
 
     registerCommand(commandsRegistry, "login", handlerLogin);
     registerCommand(commandsRegistry, "register", handlerRegister);
-    registerCommand(commandsRegistry, "users", handlerUsers);
+    registerCommand(commandsRegistry, "users", handlerListUsers);
 
     registerCommand(commandsRegistry, "agg", handlerAgg);
     registerCommand(commandsRegistry, "addfeed", handlerAddFeed);
-    registerCommand(commandsRegistry, "feeds", handlerFeeds);
+    registerCommand(commandsRegistry, "feeds", handlerListFeeds);
 
     try {
         await runCommand(commandsRegistry, cmdName, ...cmdArgs);

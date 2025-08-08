@@ -40,7 +40,7 @@ export async function handlerRegister(cmdName: string, ...args: string[]) {
     console.log(`User data: ${JSON.stringify(result)}`)
 }
 
-export async function handlerUsers(_cmdName: string, ..._args: string[]) {
+export async function handlerListUsers(_cmdName: string, ..._args: string[]) {
     let users = undefined;
     try {
         users = await getUsers();
