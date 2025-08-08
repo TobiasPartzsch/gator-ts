@@ -39,3 +39,4 @@ export async function handlerRegister(cmdName: string, ...args: string[]) {
     console.log("User created successfully!");
     console.log(`User data: ${JSON.stringify(result)}`)
 }
+
