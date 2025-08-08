@@ -1,6 +1,6 @@
 import { DrizzleQueryError } from "drizzle-orm";
-import { createUser, getUserByName } from "src/lib/db/queries/users";
-import { setUser } from "../config";
+import { createUser, getUserByName, getUsers } from "src/lib/db/queries/users";
+import { readConfig, setUser } from "../config";
 
 export async function handlerLogin(cmdName: string, ...args: string[]) {
     if (args.length !== 1) {
@@ -38,5 +38,32 @@ export async function handlerRegister(cmdName: string, ...args: string[]) {
     setUser(result.name)
     console.log("User created successfully!");
     console.log(`User data: ${JSON.stringify(result)}`)
+}
+
+export async function handlerUsers(_cmdName: string, ..._args: string[]) {
+    let users = undefined;
+    try {
+        users = await getUsers();
+    }
+    catch (error) {
+        console.log(error)
+        if (error instanceof DrizzleQueryError) {
+            throw new Error("Couldn't get users from database!");
+        }
+        else {
+            throw new Error(`Unknown error: ${error}`);
+        }
+    }
+    const config = readConfig();
+    const currentUserName = config.currentUserName;
+
+    if (users.length === 0) {
+        console.log("No users defined in the database!")
+        return;
+    }
+
+    for (const user of users) {
+        console.log(`* ${user.name}${currentUserName == user.name ? " (current)" : ""}`)
+    }
 }
 

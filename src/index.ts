@@ -4,7 +4,7 @@ import {
     runCommand,
 } from "./commands/commands";
 import { handlerReset } from "./commands/reset";
-import { handlerLogin, handlerRegister } from "./commands/users";
+import { handlerLogin, handlerRegister, handlerUsers } from "./commands/users";
 
 async function main(): Promise<void> {
     const args = process.argv.slice(2);
@@ -18,9 +18,11 @@ async function main(): Promise<void> {
     const cmdArgs = args.slice(1);
     const commandsRegistry: CommandsRegistry = {};
 
+    registerCommand(commandsRegistry, "reset", handlerReset);
+
     registerCommand(commandsRegistry, "login", handlerLogin);
     registerCommand(commandsRegistry, "register", handlerRegister);
-    registerCommand(commandsRegistry, "reset", handlerReset);
+    registerCommand(commandsRegistry, "users", handlerUsers);
 
     try {
         await runCommand(commandsRegistry, cmdName, ...cmdArgs);
