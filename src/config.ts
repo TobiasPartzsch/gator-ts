@@ -4,7 +4,7 @@ import path from "path";
 
 type Config = {
     dbUrl: string;
-    currentUserName?: string;
+    currentUserName: string;
 };
 
 export function setUser(userName: string) {
