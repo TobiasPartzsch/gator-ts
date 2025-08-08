@@ -36,8 +36,19 @@ export async function handlerReset(_cmdName: string, ..._args: string[]) {
             )
         `);
 
-        // Now delete the data
-        await db.execute(sql`DELETE FROM feeds`);
+        await db.execute(sql`
+            CREATE TABLE IF NOT EXISTS "feeds_follow" (
+                "id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+                "created_at" timestamp DEFAULT now() NOT NULL,
+                "updated_at" timestamp DEFAULT now() NOT NULL,
+                "user_id" uuid NOT NULL REFERENCES "users"("id") ON DELETE CASCADE,
+                "feed_id" uuid NOT NULL REFERENCES "feeds"("id") ON DELETE CASCADE,
+                CONSTRAINT "feeds_follow_user_id_feed_id_unique" UNIQUE("user_id", "feed_id")
+            )
+`);
+
+        // await db.execute(sql`DELETE FROM feeds_follow`);
+        // await db.execute(sql`DELETE FROM feeds`);
         await db.execute(sql`DELETE FROM users`);
 
         console.log("Reset successful! Tables created and data cleared!");
