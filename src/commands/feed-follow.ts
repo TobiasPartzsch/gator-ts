@@ -1,18 +1,13 @@
-import { readConfig } from "src/config";
 import { createFeedFollow, getFeedByUrl, getFeedFollowsForUser } from "src/lib/db/queries/feeds";
-import { getUserByName } from "src/lib/db/queries/users";
+import { User } from "src/lib/db/schema";
 
 
-export async function handlerFollow(cmdName: string, ...args: string[]) {
+export async function handlerFollow(
+    cmdName: string,
+    user: User,
+    ...args: string[]) {
     if (args.length !== 1) {
         throw new Error(`usage: ${cmdName} <follow_<url>`);
-    }
-
-    const config = readConfig();
-    const user = await getUserByName(config.currentUserName);
-
-    if (!user) {
-        throw new Error("no user logged in");
     }
 
     const url = args[0];
@@ -22,21 +17,23 @@ export async function handlerFollow(cmdName: string, ...args: string[]) {
     }
     const feedFollow = await createFeedFollow(user.id, feed.id);
     console.log(`User ${feedFollow.userName} is now following feed ${feedFollow.feedName}`);
-} export async function handlerListFollowing(_cmdName: string, ..._args: string[]) {
-    const config = readConfig();
-    const user = await getUserByName(config.currentUserName);
+}
 
-    if (!user) {
-        throw new Error("no user logged in");
-    }
-
+export async function handlerListFeedFollows(_: string, user: User) {
     const feedFollows = await getFeedFollowsForUser(user.id);
     if (feedFollows.length === 0) {
-        console.log("You are not following any feeds yet.");
+        console.log(`No feed follows found for this user.`);
         return;
     }
-    for (const feedFollow of feedFollows) {
-        console.log(feedFollow.feedName);
+
+    console.log(`Feed follows for user %s:`, user.id);
+    for (let ff of feedFollows) {
+        console.log(`* %s`, ff.feedName);
     }
+}
+
+export function printFeedFollow(username: string, feedname: string) {
+    console.log(`* User:          ${username}`);
+    console.log(`* Feed:          ${feedname}`);
 }
 
