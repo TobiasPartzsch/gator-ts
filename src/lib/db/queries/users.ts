@@ -1,6 +1,16 @@
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { db } from "..";
 import { users } from "../schema";
+
+export async function dropAllTables() {
+    await db.execute(sql`DROP TABLE IF EXISTS feeds CASCADE`);
+    await db.execute(sql`DROP TABLE IF EXISTS users CASCADE`);
+}
+
+export async function runMigrations() {
+    // await migrate(db, { migrationsFolder: "./src/lib/db/migrations" });
+    await db.execute(sql`CREATE EXTENSION IF NOT EXISTS "pgcrypto"`);
+}
 
 export async function createUser(name: string) {
     const [result] = await db.insert(users).values({ name: name }).returning();
