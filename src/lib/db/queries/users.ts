@@ -1,6 +1,7 @@
 import { eq, sql } from "drizzle-orm";
 import { db } from "..";
 import { users } from "../schema";
+import { firstOrUndefined } from "./utils";
 
 export async function dropAllTables() {
     await db.execute(sql`DROP TABLE IF EXISTS feeds CASCADE`);
@@ -18,8 +19,13 @@ export async function createUser(name: string) {
 }
 
 export async function getUserByName(name: string) {
-    const [result] = await db.select().from(users).where(eq(users.name, name));
-    return result;
+    const result = await db.select().from(users).where(eq(users.name, name));
+    return firstOrUndefined(result);
+}
+
+export async function getUserById(id: string) {
+    const result = await db.select().from(users).where(eq(users.id, id));
+    return firstOrUndefined(result);
 }
 
 export async function getUsers() {

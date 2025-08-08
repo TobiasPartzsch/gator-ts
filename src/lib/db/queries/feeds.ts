@@ -8,10 +8,6 @@ export async function createFeed(
     userID: string,
 ) {
     try {
-        // Add this before your insert to test
-        const testQuery = await db.select().from(feeds).limit(1);
-        console.log('Database connection test:', testQuery);
-
         const result = await db
             .insert(feeds)
             .values({
@@ -22,6 +18,17 @@ export async function createFeed(
             .returning();
 
         return firstOrUndefined(result);
+    } catch (error) {
+        console.error('Database error details:', error);
+        throw error;
+    }
+}
+
+export async function getFeeds() {
+    try {
+        return await db
+            .select()
+            .from(feeds)
     } catch (error) {
         console.error('Database error details:', error);
         throw error;
