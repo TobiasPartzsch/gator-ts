@@ -1,4 +1,5 @@
 import { handlerAgg } from "./commands/aggregate";
+import { handlerBrowse } from "./commands/browse";
 import {
     type CommandsRegistry,
     registerCommand,
@@ -49,6 +50,11 @@ async function main(): Promise<void> {
         commandsRegistry,
         "following",
         middlewareLoggedIn(handlerListFeedFollows)
+    );
+    registerCommand(
+        commandsRegistry,
+        "browse",
+        middlewareLoggedIn(handlerBrowse),
     );
 
     try {
