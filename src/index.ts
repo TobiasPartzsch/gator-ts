@@ -4,7 +4,7 @@ import {
     registerCommand,
     runCommand,
 } from "./commands/commands";
-import { handlerFollow, handlerListFeedFollows } from "./commands/feed-follow";
+import { handlerFollow, handlerListFeedFollows, handlerUnfollow } from "./commands/feed-follow";
 import { handlerAddFeed, handlerListFeeds } from "./commands/feeds";
 import { handlerReset } from "./commands/reset";
 import { handlerListUsers, handlerLogin, handlerRegister } from "./commands/users";
@@ -39,6 +39,11 @@ async function main(): Promise<void> {
         commandsRegistry,
         "follow",
         middlewareLoggedIn(handlerFollow)
+    );
+    registerCommand(
+        commandsRegistry,
+        "unfollow",
+        middlewareLoggedIn(handlerUnfollow)
     );
     registerCommand(
         commandsRegistry,

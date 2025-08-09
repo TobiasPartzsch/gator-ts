@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "..";
 import { feedFollows, feeds, users } from "../schema";
 import { firstOrUndefined } from "./utils";
@@ -67,6 +67,38 @@ export async function createFeedFollow(userId: string, feedId: string) {
             .innerJoin(feeds, eq(feedFollows.feedId, feeds.id))
             .innerJoin(users, eq(feedFollows.userId, users.id))
             .where(eq(feedFollows.id, newFeedFollow.id));
+        return result[0];
+    } catch (error) {
+        console.error('Database error details:', error);
+        throw error;
+    }
+}
+
+export async function deleteFeedFollow(userId: string, url: string) {
+    try {
+        const [feed] = await db
+            .select({
+                feedId: feeds.id,
+            })
+            .from(feeds)
+            .where(eq(feeds.url, url));
+
+        if (!feed) {
+            console.log(`feed with url ${url} doesn't exist in database`)
+            return null;
+        }
+
+        const result = await db.delete(feedFollows)
+            .where(
+                and(
+                    eq(
+                        feedFollows.feedId, feed.feedId
+                    ),
+                    eq(feedFollows.userId, userId),
+                ),
+            )
+            .returning();
+
         return result[0];
     } catch (error) {
         console.error('Database error details:', error);
