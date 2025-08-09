@@ -20,9 +20,9 @@ Gator helps you stay up-to-date with your favorite RSS feeds without leaving the
 
 Before you can run Gator, you'll need:
 
-### Go
-- **Go 1.21+** - [Download and install Go](https://golang.org/dl/)
-- Verify installation: `go version`
+### Node.js
+- **Node.js 18+** - [Download and install Node.js](https://nodejs.org/en/download/)
+- Verify installation: `node -v` and `npm -v`
 
 ### PostgreSQL
 - **PostgreSQL 12+** - [Download PostgreSQL](https://www.postgresql.org/download/)
@@ -33,12 +33,15 @@ Before you can run Gator, you'll need:
 Note your connection details (host, port, username, password, database name)
 
 ### Database Migration Tool
-- **goose** - For running database migrations
+
+- **npm install** - The project uses a migration tool defined in its package.json dependencies.
+
   ```bash
-  go install github.com/pressly/goose/v3/cmd/goose@latest
+  npm install
   ```
 
 ### Environment Setup
+
 - Set your database connection string as an environment variable:
   ```bash
   export DATABASE_URL="postgres://username:password@localhost:5432/gator?sslmode=disable"
@@ -58,23 +61,26 @@ Note your connection details (host, port, username, password, database name)
 
 2. **Install dependencies:**
    ```bash
-   go mod tidy
+   npm install
    ```
 
 3. **Run database migrations:**
    ```bash
-   goose -dir sql/schema postgres $DATABASE_URL up
+   npm run migrate
    ```
+   (Assuming your package.json has a script like "migrate": "..." to run your database migrations, perhaps using a tool like TypeORM CLI, Knex, or node-pg-migrate.)
 
 4. **Build the application:**
    ```bash
-   go build -o gator
+   npm run build
    ```
+   (This will transpile your TypeScript code into JavaScript in a dist/ folder, for example.)
 
 5. **Verify installation:**
    ```bash
-   ./gator --help
+   npm start -- --help
    ```
+
 
 ## Usage
 
